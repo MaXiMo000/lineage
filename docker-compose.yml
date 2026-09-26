@@ -1,0 +1,16 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: lineage
+      POSTGRES_PASSWORD: lineage
+      POSTGRES_DB: lineage
+    ports: ["5432:5432"]
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql:ro
+      - pg:/var/lib/postgresql/data
+  redis:
+    image: redis:7
+    ports: ["6379:6379"]
+volumes:
+  pg:

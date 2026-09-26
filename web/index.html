@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>lineage</title>
+<style>
+  body { font: 15px/1.5 system-ui, sans-serif; max-width: 860px; margin: 2rem auto; padding: 0 1rem; }
+  textarea { width: 100%; height: 11rem; font: 13px ui-monospace, monospace; }
+  ul { list-style: none; padding-left: 1.2rem; border-left: 2px solid #ccc; }
+  li { margin: .6rem 0; }
+  .meta { color: #666; font-size: 13px; }
+  del { background: #fdd; } ins { background: #dfd; text-decoration: none; }
+</style>
+</head>
+<body>
+<h1>lineage</h1>
+<p>Phase 0: one variant per line, <code>YYYY-MM-DD | url | text</code>. Phase 1 replaces this with automatic retrieval.</p>
+<textarea id="in">1921-01-01 | https://example.org/cameron | Not everything that can be counted counts, and not everything that counts can be counted.
+1986-01-01 | https://example.org/book | Not everything that counts can be counted, and not everything that can be counted counts.
+2009-05-01 | https://example.org/blog | Not everything that counts can be counted, and not everything that can be counted counts. - Albert Einstein
+2016-03-10 | https://example.org/pin | Not everything that counts can be counted - Albert Einstein</textarea>
+<button id="go">Build tree</button>
+<div id="out"></div>
+<script>
+const esc = s => s.replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+document.getElementById('go').onclick = async () => {
+  const variants = document.getElementById('in').value.split('\n').filter(Boolean).map(l => {
+    const [date, url, ...rest] = l.split('|').map(s => s.trim());
+    return { date, url, text: rest.join('|') };
+  });
+  const res = await fetch('/api/tree', { method: 'POST', headers: {'content-type': 'application/json'}, body: JSON.stringify({ variants }) });
+  const nodes = await res.json();
+  const kids = id => nodes.filter(n => n.parent === id);
+  const render = list => '<ul>' + list.map(n => `<li>
+      <div class="meta">${esc(n.date.slice(0,10))} · <a href="${esc(n.url)}">${esc(n.url)}</a>${n.parent ? ` · sim ${n.score.toFixed(2)}` : ' · root'}</div>
+      <div>${esc(n.text)}</div>
+      ${n.changes.map(c => `<div class="meta">${c.old ? `<del>${esc(c.old)}</del>` : ''} ${c.new ? `<ins>${esc(c.new)}</ins>` : ''}</div>`).join('')}
+      ${kids(n.id).length ? render(kids(n.id)) : ''}</li>`).join('') + '</ul>';
+  document.getElementById('out').innerHTML = render(kids(null));
+};
+</script>
+</body>
+</html>
