@@ -38,6 +38,30 @@ appearance, every variant, the date and date-confidence for each, and a labelled
 
 ---
 
+## Phase 0.5: Design foundation (1–2 weeks). **The UI must be striking, not AI-looking.**
+
+Read `docs/DESIGN.md` first; it's the spec. Build against the ground-truth fixtures through `POST /api/tree`, so the
+design is judged on real data before retrieval exists.
+
+- [ ] `web/` becomes **Vite + TypeScript** (no UI framework unless state gets hairy; the graph is custom SVG, **not** React Flow).
+      FastAPI serves `web/dist` in production; Vite proxies `/api` in dev
+- [ ] Tokens (`web/src/tokens.css`): the six colours with their measured contrast ratios in comments, a type scale, a 4px spacing grid,
+      motion durations/easing, z-layers. Fonts self-hosted with `@fontsource/newsreader`, `ibm-plex-mono`, `instrument-sans`
+- [ ] Hero / empty state per DESIGN.md §Screens 1, with sample-claim buttons wired to the fixtures
+- [ ] Graph: a time axis with mono year ticks; lanes; square specimen nodes; orthogonal elbow edges; the EARLIEST FOUND stamp;
+      dashed `--gap` missing-link connectors; hovering a node lights its ancestry path
+- [ ] Specimen inspector with the inline proofreader diff (`--mutation` underline for insertions, struck `--graphite` for deletions),
+      mutation tags, and the `●●●○` trust tier
+- [ ] Commit-log view (`L`), keyboard map + `?` overlay, and focus rings
+- [ ] Mobile: a vertical git graph + bottom-sheet inspector, verified at 360/390
+- [ ] Screenshots at 390 and 1440 in `docs/screenshots/0.5/`, self-reviewed against the DESIGN.md anti-"AI look" list.
+      Fix anything that fails before ticking
+
+**Acceptance:** Lighthouse Accessibility 100 and Performance ≥ 90; no item on the anti-"AI look" list present; the 1440 screenshot
+of the "Not everything that counts" tree reads as a poster.
+
+---
+
 ## Phase 1: Text-quote MVP (2–3 weeks)
 
 Goal: paste a quote and get a real tree for at least 3 of the 5 ground-truth cases, with no manual input.
@@ -73,9 +97,8 @@ Goal: paste a quote and get a real tree for at least 3 of the 5 ground-truth cas
 - [ ] Filter candidates: `similarity(claim, snippet) >= 0.2` or embedding cosine ≥ 0.75 (add `sentence-transformers`
       `all-MiniLM-L6-v2` only if recall on the eval set needs it)
 - [ ] `build_tree()` over the surviving candidates
-- [ ] Frontend: move to **Vite + React + React Flow** in `web/`. Time on the x-axis, one lane per root. Click a node to see
-      the snippet, source link, Wayback link, date + kind badge, and the diff vs its parent
-- [ ] Live-updating tree over SSE (watching it grow is the demo)
+- [ ] Wire the Phase 0.5 UI to real traces: the hero input posts to `/api/traces`, and the result page loads `/api/traces/{id}`
+- [ ] Live-updating tree over SSE: the "Tracing" screen in docs/DESIGN.md (truthful log, nodes appearing on the axis, edge traces, FLIP)
 - [ ] Permalink `/t/{id}`
 
 **Acceptance:** eval shows ≥3/5 cases with earliest-year error ≤ 5 years; a fresh trace finishes in < 2 min.

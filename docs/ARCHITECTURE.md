@@ -3,7 +3,7 @@
 ## System
 
 ```
-            ┌──────────── web (Vite/React + React Flow) ────────────┐
+            ┌──────── web (Vite + TS, custom SVG graph) ────────────┐
             │  paste claim / upload screenshot → live tree via SSE  │
             └───────────────┬───────────────────────▲───────────────┘
                             │ POST /api/traces      │ GET /api/traces/{id}/events (SSE)

@@ -6,6 +6,7 @@
 1. `docs/PLAN.md`: phases with checkboxes. **Work on the first unticked task.** Tick boxes as you finish.
 2. `docs/ARCHITECTURE.md`: pipeline, algorithms, and why they were chosen.
 3. `docs/DATA_SOURCES.md`: endpoints, costs, limits.
+4. `docs/DESIGN.md`: **the UI spec. The bar is striking and not AI-looking**, matching the author's portfolio/tidewatch/afterglow.
 
 ## Commands
 ```bash
@@ -22,7 +23,7 @@ docker compose up -d                  # Postgres+pgvector, Redis (Phase 1+)
 - `lineage/wayback.py`: earliest Wayback capture for a URL
 - `lineage/api.py`: FastAPI; `POST /api/tree` today
 - `lineage/sources/*.py`: (Phase 1) one module per source, `search(query, before) -> list[Candidate]`
-- `web/`: Phase 0 static page; becomes Vite + React + React Flow in Phase 1e
+- `web/`: Phase 0 static page; becomes Vite + TypeScript + custom SVG in Phase 0.5 (spec: docs/DESIGN.md)
 - `schema.sql`: Postgres schema (auto-loaded by docker compose)
 
 ## Rules
@@ -32,5 +33,7 @@ docker compose up -d                  # Postgres+pgvector, Redis (Phase 1+)
 - Say "earliest found", never "earliest". Label posts, not people.
 - Store snippets, not full pages.
 - Non-trivial logic gets one focused test in `tests/`.
+- UI work follows docs/DESIGN.md exactly: tokens only (no raw hex in components), self-hosted fonts, AA contrast, keyboard, and
+  reduced motion. Check the result in the browser at 390 and 1440 and review it against the anti-"AI look" list before ticking.
 - Secrets live in `.env` (see `.env.example`), never committed.
 - Commit after each ticked task with a clear message; push to `origin main`.

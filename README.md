@@ -37,6 +37,7 @@ uvicorn lineage.api:app --reload                  # http://localhost:8000
 
 - [docs/PLAN.md](docs/PLAN.md): phases, tasks, acceptance criteria
 - [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md): pipeline, data model, algorithms, API
+- [docs/DESIGN.md](docs/DESIGN.md): the UI spec: concept, tokens, screens, motion, and the anti-"AI look" rules
 - [docs/DATA_SOURCES.md](docs/DATA_SOURCES.md): every source, endpoint, limit, cost, and license
 - [docs/KICKOFF.md](docs/KICKOFF.md): the prompt to start a new Claude Code session on this repo
 

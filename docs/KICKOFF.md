@@ -7,20 +7,29 @@ Paste this into a fresh Claude Code session opened in this repo's folder:
 You're picking up **lineage**, "git blame for the internet". Paste a viral claim/quote/screenshot, and it finds the
 earliest *found* appearance and shows how the claim mutated as it spread, as a shareable lineage tree.
 
-1. Read `CLAUDE.md`, then `docs/PLAN.md`, `docs/ARCHITECTURE.md`, `docs/DATA_SOURCES.md` in full before writing code.
+**The UI bar is high: it must be striking and must not look AI-generated.** No 3D, but it has to stand next to my other
+projects. Before any UI work, study them on disk: `../portfolio/web/src/styles.css` and `../portfolio/README.md` (the "Design"
+section), `../tidewatch/frontend/src/style.css`, and `../afterglow-src/afterglow/docs/EXPERIENCE.md` +
+`../afterglow-src/afterglow/frontend/src/style.css`. Match their craft (tokens with rules, one reserved signal colour,
+serif + mono pairing, hairlines, truthful loading, pacing), but follow this project's own identity in `docs/DESIGN.md`.
+
+1. Read `CLAUDE.md`, then `docs/PLAN.md`, `docs/ARCHITECTURE.md`, `docs/DATA_SOURCES.md`, `docs/DESIGN.md` in full before writing code.
 2. Run `pip install -e ".[dev]" && pytest -q` to confirm the baseline is green.
 3. Find the first unticked task in `docs/PLAN.md`. Work through tasks **in order**, one at a time:
    - implement the smallest version that meets the task, following the rules in CLAUDE.md
    - add or extend one focused test; `pytest -q` must stay green
+   - for UI tasks: open it in the browser, screenshot at 390 and 1440 wide, check it against the DESIGN.md anti-"AI look" list
+     and quality bar, and fix what fails. Show me the screenshots
    - tick the box in PLAN.md, commit with a descriptive message, `git push`
 4. For the Phase 0 ground-truth cases, research each quote's real origin (use web search; cross-check Wikiquote and
    Quote Investigator by reading them, not scraping). Record sources in each fixture so every expected year is verifiable.
+   Phase 0.5 (the design foundation) is built on these real fixtures.
 5. Before starting any task that needs an API key (SerpAPI, Brave, TinEye, Anthropic, Fact Check), check `.env`. If the
    key is missing, ask me for it and meanwhile build that module against canned fixtures.
-6. At the end of each phase: run `scripts/eval.py`, paste the results table into the README "Status" section, and
-   summarise for me what's done, the eval numbers, and what's next.
+6. At the end of each phase: run `scripts/eval.py`, paste the results table plus a 1440 screenshot into the README "Status"
+   section, and summarise for me what's done, the eval numbers, and what's next.
 
 Guardrails: no scraping X/Twitter, no storing full pages, the LLM never invents candidates or dates, and always say
 "earliest found". If a design decision in the docs turns out wrong, update the doc in the same commit and tell me why.
 
-Start now with Phase 0 → "Ground-truth test set".
+Start now with Phase 0 → "Ground-truth test set", then Phase 0.5 → the design foundation.
